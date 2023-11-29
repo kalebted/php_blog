@@ -2,7 +2,7 @@
 session_start();
 
 // Check if the user is not logged in
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
 }
@@ -27,7 +27,7 @@ $posts = json_decode($postsJson, true);
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: bisque;
             padding: 20px;
         }
 
@@ -47,22 +47,34 @@ $posts = json_decode($postsJson, true);
             margin: 0;
         }
 
-        .header .buttons {
+        .header-buttons {
             display: flex;
             gap: 10px;
         }
 
-        .header .buttons button {
-            padding: 5px 10px;
+        .button {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .button-link {
+            text-decoration: none;
+            color: #fff;
         }
 
         .content {
             background-color: #fff;
             padding: 20px;
             border: 1px solid #ddd;
+            margin: 10px;
             border-radius: 5px;
         }
 
@@ -91,23 +103,22 @@ $posts = json_decode($postsJson, true);
     <div class="container">
         <div class="header">
             <h1>Dashboard</h1>
-            <div class="buttons">
-                <button onclick="window.location.href='post.php'">New Post</button>
+            <div class="header-buttons">
+                <button class="button" onclick="window.location.href='post.php'">New Post</button>
                 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
                     <input type="submit" name="logout" value="Logout">
                 </form>
             </div>
         </div>
+        <?php foreach ($posts as $post) : ?>
             <div class="content">
-                <?php foreach ($posts as $post) : ?>
-                    <div class="post">
-                        <div class="title"><?php echo $post['title']; ?></div>
-                        <div class="timestamp"><?php echo date('F j, Y H:i:s', strtotime($post['timestamp'])); ?></div>
-                        <div class="content"><?php echo substr($post['content'], 0, 100); ?>... <a href="#">Read more</a></div>
-                    </div>
+                <div class="post">
+                    <div class="title"><?php echo $post['title']; ?></div>
+                    <div class="timestamp"><?php echo date('F j, Y H:i:s', strtotime($post['timestamp'])); ?></div>
+                    <div class="content"><?php echo substr($post['content'], 0, 300); ?>... <a href="#">Read more</a></div>
+                </div>
             </div>
         <?php endforeach; ?>
-        </div>
     </div>
 </body>
 

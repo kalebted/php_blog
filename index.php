@@ -1,3 +1,9 @@
+<?php
+// Read blog posts from the JSON file
+$postsJson = file_get_contents('posts.json');
+$posts = json_decode($postsJson, true);
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -56,6 +62,36 @@
             text-decoration: none;
             color: #fff;
         }
+
+        /* style from dashboard */
+        .content {
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .post {
+            margin-bottom: 20px;
+        }
+
+        .post .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .post .timestamp {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .post .content {
+            margin-top: 10px;
+        }
+
+        /* end of dash style */
     </style>
 </head>
 
@@ -69,22 +105,15 @@
             </div>
         </div>
 
-        <?php
-        // Read blogs from JSON file
-        $blogsJson = file_get_contents('blogs.json');
-        $blogs = json_decode($blogsJson, true);
-
-        // Loop through blogs and output them
-        foreach ($blogs as $blog) {
-            echo '<div class="blog">';
-            echo '<h2>' . $blog['title'] . '</h2>';
-            echo '<p class="blog-date">Posted on ' . $blog['date'] . '</p>';
-            echo '<p>' . $blog['content'] . '</p>';
-            echo '<a class="blog-link" href="' . $blog['url'] . '">Read More</a>';
-            echo '</div>';
-        }
-        ?>
-
+        <?php foreach ($posts as $post) : ?>
+            <div class="content">
+                <div class="post">
+                    <div class="title"><?php echo $post['title']; ?></div>
+                    <div class="timestamp"><?php echo date('F j, Y H:i:s', strtotime($post['timestamp'])); ?></div>
+                    <div class="content"><?php echo substr($post['content'], 0, 300); ?>... <a href="#">Read more</a></div>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </body>
 
